@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Energy from Wavelength</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background-color: #fdfdfd; /* off-white */
+      border: 2px solid black;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    input[type="number"] {
+      width: 150px;
+      padding: 5px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 6px 12px;
+    }
+    #result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <label for="wavelength">Wavelength (nm):</label>
+    <input type="number" id="wavelength" placeholder="e.g. 500">
+    <button onclick="calculateEnergy()">Calculate</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateEnergy() {
+      const wavelength = parseFloat(document.getElementById("wavelength").value);
+      const resultBox = document.getElementById("result");
+
+      if (isNaN(wavelength) || wavelength <= 0) {
+        resultBox.textContent = "Please enter a valid wavelength in nm.";
+        return;
+      }
+
+      // Energy (eV) = 1240 / wavelength (nm)
+      const energy = 1240 / wavelength;
+      resultBox.textContent = `Energy: ${energy.toFixed(2)} eV`;
+    }
+  </script>
+</body>
+</html>
