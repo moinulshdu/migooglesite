@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Mass Calculator</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #fbfbfb;
+      padding: 20px;
+      font-size: 20px;
+    }
+    .container {
+      background-color: #dff6dd;
+      border: 2px solid #333;
+      border-radius: 5px;
+      padding: 10px; /* how close the text will be w.r.t. border */
+      width: 420px; 
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input[type="number"] {
+      width: 100px;
+      height: 30px;
+      font-size: 20px;
+      font-family: Arial, sans-serif;
+
+      background-color: #f9f9f9; /* Background (face) color */
+      color: #333;               /* Text color */
+    
+      border: 0.5px solid #444;    /* Edge (border) color */
+      border-radius: 6px;        /* Rounded corners */
+      padding: 5px 10px;         /* Inner spacing */
+    }
+
+    select {
+        width: 100px;              /* Width of dropdown */
+        height: 40px;              /* Height of dropdown */
+        font-size: 20px;           /* Font size of the text */
+        font-family: Arial, sans-serif; /* Font family */
+        
+        background-color: #f9f9f9; /* Background (face) color */
+        color: #333;               /* Text color */
+        
+        border: 0.5px solid #444;    /* Edge (border) color */
+        border-radius: 6px;        /* Rounded corners */
+        padding: 5px 10px;         /* Inner spacing */
+        
+        appearance: none;          /* Removes default system style */
+        -webkit-appearance: none;  /* For Safari */
+        -moz-appearance: none;     /* For Firefox */
+
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 5px center;
+        background-size: 30px;
+        cursor: pointer;
+    }
+    .slider {
+        width: 70%;
+        height: 8px;
+        background: #ddd;
+        border-radius: 10px;
+        outline: none;
+        margin-top: 8px;
+    }
+
+    .button-calc {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border-radius: 5px; 
+      font-size: 20px;
+      background-color: orange;
+      color: white;
+      border: 1px solid black;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .button-calc:hover {
+      background-color: white;
+      color: black;
+      border: 3px solid orange;
+    }
+    .result-box {
+      display: inline-block;
+      margin-left: 10px;
+      width: 250px;
+      height: 30px;
+      vertical-align: middle;
+      background-color: white;
+      border: 1px solid #999;
+      padding: 5px;
+      font-size: 20px;
+    }
+    h3 {
+        font-size: 25px;
+        color: rgb(114, 0, 0);
+    }
+    #compoundSelect {
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #f9f9f9;
+    width: 250px; /* Let the width adjust based on content */
+    }
+    
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>Mass from volume & concentration </h3>
+
+    <label>
+        Select compound:
+        <select id="compoundSelect" onchange="handleCompoundChange()">
+          
+          <option value="128.41">CdO</option>
+          <option value="266.53">Cd(acetate).2H20</option>
+          <option value="613.93">bis(stearoyl)Se</option>
+          <option value="282.47">Oleic Acid</option>
+          <option value="334.48">ODPA</option>
+          <option value="278.37">TDPA</option>
+          <option value="166.16">HPA</option>
+          <option value="318.48">ODPiA</option>
+          <option value="262.37">TDPiA</option>
+          <option value="150.16">HPiA</option>
+          <option value="675.33">Cd-oleate</option>
+          <option value="290.43">TMPPA [bis(2,4,4-trimethylpentyl)phosphinic acid]</option>
+          <option value="186.04">Ferrocene</option>
+          <option value="106.14">3-MPA</option>
+          <option value="107.16">Benzyl amine</option>
+          <option value="73.14">butylamine</option>
+          <option value="204.05">Propylenediphosphonic acid</option>
+          <option value="other" selected>Other</option> <!-- Default selection -->
+        </select>
+      </label>
+      
+      <label id="mwInputLabel">
+        Molecular weight (g/mol):
+        <input type="number" id="molecularWeight" step="any" style="width: 165px;">
+      </label>
+    
+    <label>Purity:
+    <input type="number" id="purity" value="100" step="0.01" style="width: 295px;"> % 
+    <input type="range" id="puritySlider" min="0" max="100" value="100" class="slider" step="0.01" style="display: block; margin-left: 50px; width: 350px;">
+    </label>  
+    
+    <label>Concentration:
+    <input type="number" id="concentration" value="20" step="any">
+    <select id="concentrationUnit" style="width: 150px;">
+        <option value="1e-9">nanomol/L</option>
+        <option value="1e-6">&micro;M</option>
+        <option value="1e-3" selected>mM</option>
+        <option value="1">mol/L</option>
+    </select>
+    <input type="range" id="concentrationSlider" min="0" max="100" value="20" class="slider" style="display: block; margin-left: auto; width: 295px;">
+    </label>
+
+    <label>Solution Volume:
+      <input type="number" id="volume" value="5" step="any" style="width: 100px;">
+      <select id="volumeUnit" style="width: 132px;">
+        <option value="1e-6">&micro;L</option>
+        <option value="1e-3" selected>mL</option>
+        <option value="1">L</option>
+      </select>
+      <input type="range" id="volumeSlider" min="0" max="100" value="5" class="slider" style="display: block; margin-left: auto; width: 275px;">
+    </label>
+
+    <button class="button-calc">Mass =</button>
+    <div class="result-box" id="massResult"></div>
+  </div>
+
+  <script>
+
+    const purityInput = document.getElementById('purity');
+    const puritySlider = document.getElementById('puritySlider');
+
+    const concentrationInput = document.getElementById('concentration');
+    const concentrationSlider = document.getElementById('concentrationSlider');
+    const concentrationUnit = document.getElementById('concentrationUnit');
+  
+    const volumeInput = document.getElementById('volume');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeUnit = document.getElementById('volumeUnit');
+  
+    const compoundSelect = document.getElementById("compoundSelect");
+    const mwInput = document.getElementById("molecularWeight");
+    const massResult = document.getElementById('massResult');
+  
+    function handleCompoundChange() {
+      const selected = compoundSelect.value;
+  
+      if (selected === "other") {
+        mwInput.value = "";
+        mwInput.placeholder = "Enter MW";
+        mwInput.disabled = false;
+      } else {
+        mwInput.value = selected;
+        mwInput.placeholder = "";
+        mwInput.disabled = true;
+      }
+  
+      calculateMass(); // Live update when compound is selected
+    }
+  
+    // Initial setup
+    handleCompoundChange();
+  
+    // Sync sliders and inputs
+    purityInput.addEventListener('input', () => {
+        puritySlider.value = purityInput.value;
+        calculateMass(); // Optional: only if purity affects mass
+    });
+    puritySlider.addEventListener('input', () => {
+        purityInput.value = puritySlider.value;
+        calculateMass(); // Optional
+    });
+
+    concentrationInput.addEventListener('input', () => {
+      concentrationSlider.value = concentrationInput.value;
+      calculateMass();
+    });
+    concentrationSlider.addEventListener('input', () => {
+      concentrationInput.value = concentrationSlider.value;
+      calculateMass();
+    });
+  
+    volumeInput.addEventListener('input', () => {
+      volumeSlider.value = volumeInput.value;
+      calculateMass();
+    });
+    volumeSlider.addEventListener('input', () => {
+      volumeInput.value = volumeSlider.value;
+      calculateMass();
+    });
+  
+    // Add listeners to dropdowns and MW field
+    [concentrationUnit, volumeUnit, mwInput, compoundSelect].forEach(el =>
+      el.addEventListener('input', calculateMass)
+    );
+  
+    function calculateMass() {
+      const conc = parseFloat(concentrationInput.value);
+      const concMultiplier = parseFloat(concentrationUnit.value);
+      const mw = parseFloat(mwInput.value);
+      const vol = parseFloat(volumeInput.value);
+      const volMultiplier = parseFloat(volumeUnit.value);
+  
+      if (isNaN(conc) || isNaN(mw) || isNaN(vol)) {
+        massResult.textContent = "";
+        return;
+      }
+      
+      const purity = parseFloat(purityInput.value) / 100; // convert % to fraction
+      const mol = conc * concMultiplier;
+      const liter = vol * volMultiplier;
+      let mass = mol * mw * liter * purity;
+  
+      let displayText = "";
+  
+      if (mass >= 1e3 && mass < 1e6) {
+        displayText = (mass / 1e3).toFixed(3) + " kg";
+      } else if (mass >= 1 && mass < 1e3) {
+        displayText = mass.toFixed(3) + " g";
+      } else if (mass >= 1e-3 && mass < 1) {
+        displayText = (mass * 1e3).toFixed(3) + " mg";
+      } else if (mass >= 1e-6 && mass < 1e-3) {
+        displayText = (mass * 1e6).toFixed(3) + " µg";
+      } else if (mass >= 1e-9 && mass < 1e-6) {
+        displayText = (mass * 1e9).toFixed(3) + " nanogram";
+      } else {
+        displayText = mass.toExponential(3) + " g";
+      }
+  
+      massResult.textContent = displayText;
+    }
+  </script>
+  
+</body>
+</html>
