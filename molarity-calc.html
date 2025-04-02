@@ -260,7 +260,7 @@
       const purity = parseFloat(purityInput.value) / 100; // convert % to fraction
       const mol = conc * concMultiplier;
       const liter = vol * volMultiplier;
-      let mass = mol * mw * liter * purity;
+      let mass = ( mol * mw * liter ) / purity;
   
       let displayText = "";
   
